@@ -4,13 +4,10 @@ const fs = require("node:fs");
 
 const myURL = "https://tatort-fans.de/category/stadt-archiv/tatort-muenster/";
 
-
-//from myURL it get all the titles and stripes the Tatort Folge Nummer : Name of Episode, takes only the name
 function getAllTitles(titles) {
   return titles.map((title) => title.children[0].text.split(":")[1].trim());
 }
 
-//using this async function + dom finds all the text present on all the h2 .teaser-title and stores all the list of titles 
 async function gimmeTitles() {
   try {
     const response = await fetch(myURL);
