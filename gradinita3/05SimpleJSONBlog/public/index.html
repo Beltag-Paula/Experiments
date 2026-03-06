@@ -1,0 +1,222 @@
+<!doctype html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Ce titlu? N-avem titlu</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="header">
+      <h2>Example</h2>
+    </div>
+
+    <div class="row">
+      <div id="mainBlog" class="leftcolumn">
+        <!--
+        <div class="card postBlog">
+          <h2>id</h2>
+          <h2>TITLE HEADING</h2>
+          <h5>Dec 7, 2017</h5>
+          <div class="fakeimg" style="height: 200px">Image</div>
+          <p>Some text..</p>
+          <p>
+            Sunt in culpa qui officia deserunt mollit anim id est laborum
+            consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
+            labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
+            exercitation ullamco.
+          </p>
+        </div>
+        -->
+        <input id="searchInput" placeholder="Search blog..." />
+        <button onclick="searchBlogs()">Search</button>
+
+        <div id="addBlog" class="card">
+          <h3>Create New Blog</h3>
+          <input id="newTitle" placeholder="Title" />
+          <input id="newImage" placeholder="Image" />
+          <textarea id="newText" placeholder="Text"></textarea>
+          <button onclick="createBlog()">Create</button>
+        </div>
+      </div>
+
+      <div class="rightcolumn">
+        <div class="card">
+          <h2>About Me</h2>
+          <div class="fakeimg" style="height: 100px">Image</div>
+          <p>Some text about me in culpa qui officia deserunt mollit anim..</p>
+        </div>
+
+        <div class="card">
+          <h3>Popular Post</h3>
+          <div class="fakeimg">Image</div>
+          <br />
+          <div class="fakeimg">Image</div>
+          <br />
+          <div class="fakeimg">Image</div>
+        </div>
+
+        <div class="card">
+          <h3>Follow Me</h3>
+          <p>Some text..</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <h2>Footer</h2>
+    </div>
+
+    <script>
+      const mainBlog = document.getElementById("mainBlog");
+      const createNewBlog = document.getElementById("addBlog");
+
+      async function searchBlogs() {
+        const searchValue = document.getElementById("searchInput").value;
+
+        const response = await fetch(`/api/blogs?search=${searchValue}`);
+        const blogs = await response.json();
+
+        mainBlog.querySelectorAll(".postBlog").forEach((el) => el.remove());
+
+        blogs.forEach((blog) => renderBlog(blog));
+      }
+
+      async function getAllBlogs() {
+        const response = await fetch("/api/blogs");
+        const blogsServer = await response.json();
+
+        mainBlog.querySelectorAll(".postBlog").forEach((el) => el.remove());
+
+        blogsServer.forEach((blog) => renderBlog(blog));
+      }
+
+      function renderBlog(blog) {
+        const blogContainer = document.createElement("div");
+        blogContainer.className = "card postBlog";
+        blogContainer.id = blog.id;
+
+        const title = document.createElement("h2");
+        title.innerText = blog.title;
+
+        const date = document.createElement("h5");
+        date.innerText = new Date(blog.createdAt).toLocaleString();
+
+        const imageContainer = document.createElement("div");
+        imageContainer.className = "fakeimg";
+        imageContainer.style.height = "200px";
+        imageContainer.innerText = blog.image;
+
+        const deleteButton = document.createElement("button");
+        deleteButton.textContent = "Delete";
+        deleteButton.className = "my-delete-button";
+        deleteButton.addEventListener("click", () => {
+          deleteBlogById(blog.id, blogContainer);
+        });
+
+        const updateButton = document.createElement("button");
+        updateButton.textContent = "Update";
+        updateButton.className = "my-update-button";
+        updateButton.addEventListener("click", () => {
+          updateBlogById(blog);
+        });
+
+        blogContainer.append(
+          title,
+          date,
+          imageContainer,
+          deleteButton,
+          updateButton,
+        );
+
+        blog.textContent.forEach((text) => {
+          const paragraph = document.createElement("p");
+          paragraph.innerText = text;
+          blogContainer.append(paragraph);
+        });
+
+        mainBlog.append(blogContainer);
+      }
+
+      async function deleteBlogById(id, blogContainer) {
+        try {
+          const response = await fetch(`/api/blog/${id}`, {
+            method: "DELETE",
+          });
+
+          if (response.ok) {
+            blogContainer.remove();
+          } else {
+            console.log("Failed to delete");
+          }
+        } catch (err) {
+          console.error("Delete error", err);
+        }
+      }
+
+      async function updateBlogById(blog) {
+        const newTitle = prompt("Edit title", blog.title);
+        const newImage = prompt("Edit image", blog.image);
+        const newText = prompt("Edit text", blog.textContent.join("\n"));
+        const updatedTextArray = newText ? newText.split("\n") : blog.textContent;
+
+        if (!newTitle && !newText && !newImage) return;
+
+        try {
+          const response = await fetch(`/api/blog/${blog.id}`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              title: newTitle || blog.title,
+              image: newImage || blog.image,
+              date: new Date().toISOString(),
+              textContent: updatedTextArray,
+            }),
+          });
+
+          if (response.ok) {
+            getAllBlogs();
+          }
+        } catch (err) {
+          console.error("Update error", err);
+        }
+      }
+
+      async function createBlog() {
+        const title = document.getElementById("newTitle").value;
+        const image = document.getElementById("newImage").value;
+        const text = document.getElementById("newText").value;
+
+        if (!title || !text) {
+          alert("Title and text are required");
+          return;
+        }
+
+        try {
+          const response = await fetch("/api/blog", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              title,
+              image,
+              textContent: [text],
+            }),
+          });
+
+          if (response.ok) {
+            document.getElementById("newTitle").value = "";
+            document.getElementById("newImage").value = "";
+            document.getElementById("newText").value = "";
+
+            getAllBlogs();
+          }
+        } catch (err) {
+          console.error("Create error", err);
+        }
+      }
+
+      getAllBlogs();
+    </script>
+  </body>
+</html>

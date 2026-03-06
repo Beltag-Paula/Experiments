@@ -1,0 +1,111 @@
+:root {
+    --bg: #121212;
+    --calculator-bg: #1e1e1e;
+    --display-bg: #2a2a2a;
+    --text: #ffffff;
+    --button-bg: #2d2d2d;
+    --button-hover: #3a3a3a;
+    --operator: #ff9500;
+    --equal: #00c853;
+}
+
+body.light {
+    --bg: #f4f4f4;
+    --calculator-bg: #ffffff;
+    --display-bg: #eaeaea;
+    --text: #000000;
+    --button-bg: #f0f0f0;
+    --button-hover: #dcdcdc;
+    --operator: #ff6f00;
+    --equal: #00a152;
+}
+
+body {
+    margin: 0;
+    background: var(--bg);
+    font-family: 'Segoe UI', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    transition: background 0.3s ease;
+}
+
+.theme-toggle {
+    margin-bottom: 20px;
+}
+
+.theme-toggle button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    background: var(--operator);
+    color: white;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.calculator {
+    background: var(--calculator-bg);
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    width: 320px;
+    transition: background 0.3s ease;
+}
+
+.calculator__output {
+    background: var(--display-bg);
+    color: var(--text);
+    font-size: 2rem;
+    padding: 20px;
+    text-align: right;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    overflow-x: auto;
+}
+
+.calculator__keys {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+}
+
+.key {
+    padding: 18px;
+    font-size: 1.2rem;
+    border: none;
+    border-radius: 12px;
+    background: var(--button-bg);
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.key:hover {
+    background: var(--button-hover);
+    transform: translateY(-2px);
+}
+
+.operator {
+    background: var(--operator);
+    color: #fff;
+}
+
+.equal {
+    grid-column: span 4;
+    background: var(--equal);
+    color: #fff;
+    font-weight: bold;
+}
+
+.zero {
+    grid-column: span 2;
+}
+
+.clear {
+    background: crimson;
+    color: white;
+}

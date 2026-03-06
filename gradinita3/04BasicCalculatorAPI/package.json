@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "evaluate": "^1.0.2",
+    "express": "^5.2.1",
+    "mathjs": "^15.1.1",
+    "nodemon": "^3.1.14"
+  }
+}

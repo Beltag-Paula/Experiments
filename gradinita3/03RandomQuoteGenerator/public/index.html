@@ -1,0 +1,224 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>My Stupid Exercise</title>
+
+    <style>
+      body {
+        background: #111;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        font-family: Arial, sans-serif;
+        color: white;
+      }
+
+      .myFinalDIV {
+        text-align: center;
+        margin-top: 30px;
+      }
+
+      #output {
+        margin-bottom: 20px;
+        padding: 15px;
+        min-width: 300px;
+        min-height: 40px;
+        background: #222;
+        border-radius: 8px;
+        font-size: 18px;
+      }
+
+      button {
+        padding: 10px 20px;
+        font-size: 16px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        background: #444;
+        color: white;
+        transition: 0.3s;
+      }
+
+      button:hover {
+        background: #666;
+      }
+
+      /* Rainbow wave styling */
+      .wave span {
+        display: inline-block;
+        font-size: 60px;
+        font-weight: bold;
+
+        background: linear-gradient(
+          90deg,
+          red,
+          orange,
+          yellow,
+          green,
+          blue,
+          indigo,
+          violet
+        );
+        background-size: 300%;
+
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+
+        animation:
+          wave 1.2s ease-in-out infinite,
+          rainbow 6s linear infinite;
+      }
+
+      /* Wave motion */
+      @keyframes wave {
+        0%,
+        100% {
+          transform: translateY(0px);
+        }
+
+        50% {
+          transform: translateY(-15px);
+        }
+      }
+
+      /* Moving rainbow */
+      @keyframes rainbow {
+        0% {
+          background-position: 0%;
+        }
+
+        100% {
+          background-position: 300%;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1 class="wave">Some Stupid Ass Random Generator</h1>
+
+    <div class="myFinalDIV">
+      <div id="output">...</div>
+      <div>
+        <button type="button">Click Me!</button>
+      </div>
+
+      <!-- Added form -->
+      <form
+        action="/quote"
+        method="post"
+        enctype="text/plain"
+        style="margin-top: 20px"
+      >
+        <label for="fquote">Add your new quote here:</label><br />
+        <input
+          type="text"
+          id="fquote"
+          name="fquote"
+          style="
+            background: #222;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 15px;
+            font-size: 18px;
+            min-width: 300px;
+            margin-top: 5px;
+          "
+        /><br /><br />
+        <input
+          type="submit"
+          value="Submit"
+          style="
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            background: #444;
+            color: white;
+            transition: 0.3s;
+          "
+        />
+      </form>
+
+      <p>
+        Click the "Submit" button and the quote will be saved with the other
+        quotes.
+      </p>
+    </div>
+
+    <script>
+      /* Automatically wrap each letter in <span> */
+      const waveText = document.querySelector(".wave");
+      const text = waveText.textContent;
+      waveText.textContent = "";
+
+      text.split("").forEach((char, index) => {
+        const span = document.createElement("span");
+        span.textContent = char;
+        span.style.animationDelay = index * 0.1 + "s";
+        waveText.appendChild(span);
+      });
+
+      /* Button + fetch logic */
+      const myButton = document.querySelector("button");
+      const output = document.getElementById("output");
+
+      myButton.addEventListener("click", async function () {
+        try {
+          const response = await fetch("/quote");
+          const data = await response.json();
+          output.textContent = data.quote;
+        } catch (err) {
+          console.error("Some error: " + err);
+          output.textContent = "🚧 Server not serving 🚧";
+        }
+      });
+    </script>
+  </body>
+</html>
+
+<!-- This was the code that I have written. gipiti made the rainbow animation-
+<div class="myFinalDIV">
+  <div id="output"></div>
+  <div>
+    <button type="button">Click Me!</button>
+  </div>
+
+  <form action="/quote" method="post" enctype="text/plain">
+    <label for="fquote">Add your new quote here:</label>
+    <input type="text" id="fquote" name="fquote" /><br /><br />
+    <input type="submit" value="Submit" />
+  </form>
+
+  <p>
+    Click the "Submit" button and the quote will be saved with the other
+    quotes".
+  </p>
+</div>
+
+<script>
+  const myButton = document.querySelector("button");
+  const output = document.getElementById("output");
+
+  myButton.addEventListener("click", myFunction);
+
+  async function myFunction() {
+    try {
+      const response = await fetch("/quote");
+
+      const data = await response.json();
+
+      output.textContent = data.quote;
+    } catch (err) {
+      console.error("Some error: " + err);
+    }
+  }
+
+</script>
+
+-->
