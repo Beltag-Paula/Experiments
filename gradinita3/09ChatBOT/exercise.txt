@@ -1,0 +1,4 @@
+8. Simple Chatbot API
+    • What: API that responds to user messages with canned responses.
+    • Skills: Basic routing, conditional logic, string matching.
+    • Stretch: Add a “fun fact” endpoint that returns random facts asynchronously.

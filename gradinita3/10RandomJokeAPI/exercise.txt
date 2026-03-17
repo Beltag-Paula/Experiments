@@ -1,0 +1,4 @@
+9. Random Joke API
+    • What: Serve a random joke from an array of jokes.
+    • Skills: Express routes, arrays, async simulation with setTimeout.
+    • Stretch: Fetch jokes from an external API using fetch or axios.

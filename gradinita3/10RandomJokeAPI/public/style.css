@@ -1,0 +1,105 @@
+/* TROLL MODE ACTIVATED */
+
+body {
+    background: linear-gradient(270deg, red, orange, yellow, green, blue, purple);
+    background-size: 1200% 1200%;
+    animation: rainbowBG 6s infinite alternate;
+    font-family: "Comic Sans MS", cursive, sans-serif;
+    color: white;
+    margin: 0;
+    min-height: 100vh;
+
+    /* CENTER EVERYTHING */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+/* Rainbow animation */
+@keyframes rainbowBG {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    100% {
+        background-position: 100% 50%;
+    }
+}
+
+/* Spinning title */
+h1 {
+    font-size: 60px;
+    text-shadow: 5px 5px 0px black;
+    animation: spin 4s linear infinite;
+    margin-bottom: 200px;
+}
+
+/* Spin animation */
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Buttons */
+button {
+    font-size: 18px;
+    padding: 15px 25px;
+    margin: 10px;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    background: hotpink;
+    color: white;
+    font-weight: bold;
+    transition: all 0.2s;
+    box-shadow: 0 0 15px black;
+}
+
+/* Troll hover */
+button:hover {
+    transform: translateY(-10px) rotate(5deg) scale(1.2);
+    background: lime;
+    color: black;
+}
+
+/* Joke boxes */
+#outputRandomJoke,
+#outputAllJokes,
+#outputGetJoke {
+    margin-top: 20px;
+    padding: 20px;
+    border: 5px dashed yellow;
+    background: rgba(0, 0, 0, 0.6);
+    font-size: 20px;
+    width: 60%;
+    max-width: 600px;
+    animation: shake 0.5s infinite alternate;
+}
+
+/* Shake animation */
+@keyframes shake {
+    from {
+        transform: translateX(-3px);
+    }
+
+    to {
+        transform: translateX(3px);
+    }
+}
+
+/* Paragraph styling */
+p {
+    background: black;
+    padding: 10px;
+    border-radius: 10px;
+    margin: 10px;
+    color: lime;
+    font-weight: bold;
+}

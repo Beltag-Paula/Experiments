@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Weather API Converter</title>
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <div class="dragonball">
+      <span class="star s1"></span>
+      <span class="star s2"></span>
+      <span class="star s3"></span>
+      <span class="star s4"></span>
+    </div>
+
+    <h1>Weather API Converter</h1>
+    <input type="text" id="weatherCelsiusInput" placeholder="example 20" />
+    <button onclick="convertMeMommy()">Convert me</button>
+
+    <div class="result" id="result"></div>
+    <div class="result" id="result2"></div>
+
+    <script>
+      const goku = document.createElement("img");
+      goku.src = "goku.png";
+      goku.classList.add("goku");
+      document.body.appendChild(goku);
+
+      // Function to make Goku fly horizontally across the screen
+      function flyGoku() {
+        // Set a random vertical position (between 50px and 70% of viewport height)
+        const randomTop = Math.floor(
+          Math.random() * (window.innerHeight * 0.7 - 50) + 50,
+        );
+        goku.style.top = randomTop + "px";
+
+        // Trigger the animation
+        goku.style.animation = "fly-line 8s linear forwards";
+
+        // After animation ends, reset and fly again
+        goku.addEventListener(
+          "animationend",
+          () => {
+            goku.style.animation = "none"; // reset
+            setTimeout(flyGoku, 500); // wait half a second, then fly again
+          },
+          { once: true },
+        );
+      }
+
+      // Start flying
+      flyGoku();
+
+      async function convertMeMommy() {
+        const weatherC = parseFloat(
+          document.getElementById("weatherCelsiusInput").value,
+        );
+
+        if (isNaN(weatherC)) {
+          return alert("Please enter a valid number for Celsius!");
+        }
+
+        const response = await fetch("/convert", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ weatherC }),
+        });
+
+        const data = await response.json();
+
+        if (data.fahrenheit !== undefined && data.kelvin !== undefined) {
+          document.getElementById("result").innerText =
+            `Fahrenheit: ${data.fahrenheit}`;
+          document.getElementById("result2").innerText =
+            `Kelvin: ${data.kelvin}`;
+        } else {
+          document.getElementById("result").innerText =
+            "Error: " + data.message;
+          document.getElementById("result2").innerText =
+            "Error: " + data.message;
+        }
+      }
+    </script>
+  </body>
+</html>

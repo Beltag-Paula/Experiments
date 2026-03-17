@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>URL Shortener</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <h1>URL Shortener</h1>
+    <input type="text" id="urlInput" placeholder="Enter an URL" />
+    <button onclick="shortMeMommy()">Short me</button>
+
+    <div class="result" id="result"></div>
+
+    <script>
+      async function shortMeMommy() {
+        const urlInput = document.getElementById("urlInput").value;
+
+        if (!urlInput) return alert("Please enter a URL!");
+
+        const response = await fetch("/short", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ url: urlInput }),
+        });
+
+        const data = await response.json();
+
+        if (data.shortURL) {
+          document.getElementById("result").innerHTML =
+            `<a href="${data.shortURL}" target="_blank">${data.shortURL}</a>`;
+        } else {
+          document.getElementById("result").innerText =
+            "Error: " + data.message;
+        }
+      }
+    </script>
+  </body>
+</html>

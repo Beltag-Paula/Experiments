@@ -1,0 +1,4 @@
+7. Temperature Converter API
+    • What: Convert Celsius to Fahrenheit and vice versa via a GET request.
+    • Skills: Query strings, arithmetic, sending JSON responses.
+    • Stretch: Add Kelvin as a third unit option.

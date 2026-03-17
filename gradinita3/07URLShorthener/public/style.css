@@ -1,0 +1,118 @@
+/* Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Page background */
+body {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #0d0d0d;
+    /* deep black */
+    flex-direction: column;
+    color: #ff6f31;
+    /* orange text by default */
+}
+
+/* Title */
+h1 {
+    color: #ff4500;
+    /* fiery orange-red */
+    margin-bottom: 40px;
+    font-size: 4rem;
+    /* bigger */
+    text-shadow: 3px 3px 12px #ff0000;
+    /* stronger shadow */
+    letter-spacing: 2px;
+}
+
+/* Input field */
+input {
+    width: 400px;
+    /* wider */
+    padding: 16px 20px;
+    /* bigger padding */
+    border-radius: 10px;
+    border: 3px solid #ff4500;
+    /* slightly thicker */
+    background: #1a1a1a;
+    color: #fff;
+    font-size: 20px;
+    /* bigger text */
+    outline: none;
+    transition: all 0.2s ease;
+    box-shadow: 0 0 15px rgba(255, 69, 0, 0.5);
+    /* stronger glow */
+    margin-right: 15px;
+}
+
+input::placeholder {
+    color: #ff8c42;
+    /* lighter orange */
+    font-size: 20px;
+    /* match input text */
+}
+
+/* Button */
+button {
+    padding: 16px 28px;
+    /* bigger button */
+    border: none;
+    border-radius: 10px;
+    background: #ff4500;
+    color: #fff;
+    font-weight: 700;
+    font-size: 20px;
+    /* bigger text */
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 5px 16px rgba(255, 69, 0, 0.6);
+    /* stronger glow */
+}
+
+button:hover {
+    background: #ff6347;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 22px rgba(255, 69, 0, 0.8);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+/* Result box */
+.result {
+    margin-top: 35px;
+    padding: 20px 24px;
+    /* more padding */
+    background: #1a1a1a;
+    border-left: 5px solid #ff4500;
+    /* thicker accent */
+    border-radius: 10px;
+    min-width: 400px;
+    /* wider */
+    box-shadow: 0 0 20px rgba(255, 69, 0, 0.5);
+    /* stronger glow */
+    font-size: 18px;
+    /* bigger text */
+    word-break: break-all;
+}
+
+/* Result links */
+.result a {
+    color: #ff8c42;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 18px;
+    /* bigger */
+}
+
+.result a:hover {
+    text-decoration: underline;
+    color: #ff4500;
+}

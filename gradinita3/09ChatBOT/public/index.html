@@ -1,0 +1,135 @@
+<!doctype html>
+<html>
+  <head>
+    <title>My First Stupid Chat Bot</title>
+    <link rel="stylesheet" href="matrix.css">
+  </head>
+
+  <body>
+    <h1>Chat with this stupid here</h1>
+
+    <input type="text" id="userInput" placeholder="example: Hi!" />
+
+    <button onclick="makeMeSpeak()">Submit Message</button>
+
+    <button onclick="addNewPhrase()">Submit new Key and Phrase</button>
+
+    <button onclick="showPhrases()">See Phrases Bot Knows</button>
+
+
+    <div id="result"></div>
+
+    <!--Show database-->
+    <div id="showDB"></div>
+
+    <canvas id="matrixCanvas"></canvas>
+
+
+    <script>
+      async function makeMeSpeak() {
+        const userInput = document.getElementById("userInput").value;
+
+        const response = await fetch("/api/v1/chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ userInput }),
+        });
+
+        const data = await response.json();
+
+        if (data.botPhrase !== undefined) {
+          document.getElementById("result").innerHTML =
+            `Bot says: ${data.botPhrase}`;
+        } else {
+          document.getElementById("result").innerHTML =
+            `Bot is stupid: ${data.message}`;
+        }
+      }
+
+      async function addNewPhrase() {
+        const newUserKey = prompt("Enter your key (what you will say):");
+        const newPhrase = prompt("Enter the bot's response:");
+
+        if (newUserKey && newPhrase) {
+          try {
+            const response = await fetch("/api/v1/addPhrase", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                userKey: newUserKey,
+                botPhrase: newPhrase,
+              }),
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+              alert("Database updated: " + data.message);
+            } else {
+              alert("Error: " + data.message);
+            }
+          } catch (err) {
+            console.error("Fetch error:", err);
+            alert("Failed to connect to the server.");
+          }
+        }
+      }
+
+      async function showPhrases() {
+        const response = await fetch("/api/v1/phrases");
+        const data = await response.json();
+
+        if (data.rows !== undefined) {
+          let output = "";
+
+          data.rows.forEach((row) => {
+            output += `<p>${row.userKey}, ${row.botPhrase}</p>`;
+          });
+
+          document.getElementById("showDB").innerHTML = output;
+        }
+      }
+
+
+
+      ////////////////////
+      const canvas = document.getElementById("matrixCanvas");
+const ctx = canvas.getContext("2d");
+
+canvas.height = window.innerHeight;
+canvas.width = window.innerWidth;
+
+const letters = "01アイウエオカキクケコサシスセソ";
+const matrix = letters.split("");
+
+const fontSize = 16;
+const columns = canvas.width / fontSize;
+
+const drops = [];
+
+for (let x = 0; x < columns; x++)
+  drops[x] = 1;
+
+function draw() {
+  ctx.fillStyle = "rgba(0,0,0,0.05)";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  ctx.fillStyle = "#00ff9f";
+  ctx.font = fontSize + "px monospace";
+
+  for (let i = 0; i < drops.length; i++) {
+    const text = matrix[Math.floor(Math.random() * matrix.length)];
+
+    ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+    if (drops[i] * fontSize > canvas.height && Math.random() > 0.975)
+      drops[i] = 0;
+
+    drops[i]++;
+  }
+}
+
+setInterval(draw, 35);
+    </script>
+  </body>
+</html>

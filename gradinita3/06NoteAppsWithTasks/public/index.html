@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Notes App</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+    />
+    <!-- Link CSS file -->
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <div class="container">
+      <h1>📝 My Tasks</h1>
+      <button id="themeButton" onclick="changeTheme()">🎨 Change Theme</button>
+
+      <h2>Add new task here</h2>
+      <form id="note-form">
+        <textarea
+          id="note-title"
+          placeholder="Write your note title..."
+          required
+        ></textarea>
+        <textarea
+          id="note-description"
+          placeholder="Write your note description..."
+          required
+        ></textarea>
+        <textarea
+          id="note-tags"
+          placeholder="Write your tag/tags..."
+          required
+        ></textarea>
+        <button type="button" onclick="createNote()">Create</button>
+      </form>
+
+      <h2>Search/filter tasks here</h2>
+      <input id="searchInput" placeholder="Search notes..." />
+      <button onclick="searchNote()">Search</button>
+
+      <h2>These are your tasks</h2>
+      <div id="notes-list"></div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>

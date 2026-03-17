@@ -1,0 +1,4 @@
+URL Shortener
+    • What: Accept a long URL and return a short code, then redirect when that code is accessed.
+    • Skills: Express routing, handling parameters, simple in-memory storage.
+    • Stretch: Add expiration dates or basic analytics (hit count).
