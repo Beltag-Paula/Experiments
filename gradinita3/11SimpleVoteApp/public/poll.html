@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Voting Poll</title>
+    <style>
+        body { font-family: sans-serif; text-align: center; padding: 50px; }
+        .poll-container { display: flex; justify-content: center; gap: 20px; margin-top: 30px; }
+        .card { border: 1px solid #ddd; padding: 20px; border-radius: 8px; width: 150px; }
+        button { margin-top: 10px; padding: 10px 20px; cursor: pointer; }
+        #adminLink { display: none; margin-top: 40px; color: blue; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h2>Which do you prefer?</h2>
+    <div class="poll-container">
+        <div class="card">
+            <h3 id="leftCount">0</h3>
+            <button onclick="vote('left')">Option Left</button>
+        </div>
+        <div class="card">
+            <h3 id="rightCount">0</h3>
+            <button onclick="vote('right')">Option Right</button>
+        </div>
+    </div>
+
+    <div id="adminLink" onclick="window.location.href='/pollManagement.html'">Admin Management</div>
+    <button onclick="logout()" style="margin-top: 50px;">Logout</button>
+
+    <script>
+        const token = localStorage.getItem('token');
+        if (!token) window.location.href = '/index.html';
+
+        const pollId = 1; // Default poll ID; can be changed for multiple polls
+
+        // Show admin link if user is admin
+        if (localStorage.getItem('role') === 'admin') {
+            document.getElementById('adminLink').style.display = 'block';
+        }
+
+        // Fetch and display poll results
+        async function loadResults() {
+            try {
+                const res = await fetch(`/api/v1/poll-results/${pollId}`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (!res.ok) throw new Error("Failed to load poll results");
+                const data = await res.json();
+                document.getElementById('leftCount').innerText = data.left_column_votes;
+                document.getElementById('rightCount').innerText = data.right_column_votes;
+            } catch (err) {
+                console.error(err);
+                alert("Error loading poll results");
+            }
+        }
+
+        // Submit a vote
+        async function vote(option) {
+            try {
+                const res = await fetch(`/api/v1/submit-vote/${pollId}`, {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ option })
+                });
+                if (!res.ok) throw new Error("Vote failed");
+                await loadResults();
+            } catch (err) {
+                console.error(err);
+                alert(err.message);
+            }
+        }
+
+        // Logout
+        function logout() {
+            localStorage.clear();
+            window.location.href = '/index.html';
+        }
+
+        loadResults();
+        setInterval(loadResults, 5000); // Refresh poll results every 5 seconds
+    </script>
+</body>
+</html>

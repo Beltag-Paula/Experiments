@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Management</title>
+    <style>
+        body { font-family: sans-serif; padding: 40px; max-width: 500px; margin: auto; }
+        section { border-bottom: 1px solid #ccc; padding: 20px 0; }
+        input { display: block; margin: 5px 0; width: 100%; padding: 8px; }
+        button { padding: 10px; cursor: pointer; background: #333; color: white; border: none; margin-top: 5px; }
+        h3 { margin-top: 0; }
+    </style>
+</head>
+<body>
+    <h1>Poll Management (Admin)</h1>
+    
+    <section>
+        <h3>Update Poll</h3>
+        <input type="number" id="pollId" placeholder="Poll ID" min="1">
+        <input type="number" id="leftVotes" placeholder="Left Column Votes" min="0">
+        <input type="number" id="rightVotes" placeholder="Right Column Votes" min="0">
+        <button onclick="updatePoll()">Update Poll</button>
+    </section>
+
+    <section>
+        <h3>Delete Poll</h3>
+        <input type="number" id="delId" placeholder="Poll ID to delete" min="1">
+        <button onclick="deletePoll()">Delete</button>
+    </section>
+
+    <button onclick="window.location.href='/poll.html'" style="background: gray; margin-top: 20px;">Back to Poll</button>
+
+    <script>
+        const token = localStorage.getItem('token');
+
+        if (!token || localStorage.getItem('role') !== 'admin') {
+            alert("Access denied. Admins only.");
+            window.location.href = '/index.html';
+        }
+
+        // Update a poll
+        async function updatePoll() {
+            const id = document.getElementById('pollId').value;
+            const leftVotes = parseInt(document.getElementById('leftVotes').value, 10);
+            const rightVotes = parseInt(document.getElementById('rightVotes').value, 10);
+
+            if (!id || isNaN(leftVotes) || isNaN(rightVotes) || leftVotes < 0 || rightVotes < 0) {
+                return alert("Please enter valid poll ID and vote counts (>= 0).");
+            }
+
+            try {
+                const res = await fetch(`/api/v1/admin/update-poll/${id}`, {
+                    method: 'PUT',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ leftVotes, rightVotes })
+                });
+
+                const data = await res.json();
+                alert(data.message || "Update successful");
+            } catch (err) {
+                console.error(err);
+                alert("Error updating poll.");
+            }
+        }
+
+        // Delete a poll
+        async function deletePoll() {
+            const id = document.getElementById('delId').value;
+            if (!id) return alert("Please enter a valid Poll ID.");
+
+            try {
+                const res = await fetch(`/api/v1/admin/delete-poll/${id}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const data = await res.json();
+                alert(data.message || "Poll deleted successfully");
+            } catch (err) {
+                console.error(err);
+                alert("Error deleting poll.");
+            }
+        }
+    </script>
+</body>
+</html>

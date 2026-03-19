@@ -1,8 +1,13 @@
-const { initializeDatabase } = require("../config/db");
-const db = initializeDatabase();
+const { db } = require("../config/db");
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs");
 
-// Register new user
-exports.signup = (req, res) => {
+// Load JWT secret from environment
+const SECRET_KEY =
+  process.env.JWT_SECRET || "a_very_long_random_string_123456789";
+
+// Signup controller
+exports.signup = async (req, res) => {
   const { username, password } = req.body;
 
   if (!username || !password) {
@@ -11,47 +16,60 @@ exports.signup = (req, res) => {
       .json({ message: "Username and password are required" });
   }
 
-  db.run(
-    "INSERT INTO users (username, password) VALUES (?, ?)",
-    [username, password],
-    function (err) {
-      if (err) {
-        return res
-          .status(409)
-          .json({ message: err.message || "Username already exists" });
-      }
-      res.json({ message: "User registered successfully" });
-    },
-  );
+  if (password.length < 8) {
+    return res
+      .status(400)
+      .json({ message: "Password must be at least 8 characters long" });
+  }
+
+  try {
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    db.run(
+      "INSERT INTO users (username, password, role) VALUES (?, ?, 'user')",
+      [username, hashedPassword],
+      function (err) {
+        if (err) {
+          return res.status(409).json({ message: "Username already taken" });
+        }
+        res.status(201).json({ message: "User registered successfully" });
+      },
+    );
+  } catch (err) {
+    console.error("Sign up error:", err);
+    return res.status(500).json({ message: "Internal server error" });
+  }
 };
 
-// Login user
-exports.login = (req, res) => {
+// Login controller
+exports.login = async (req, res) => {
   const { username, password } = req.body;
-
-  if (!username || !password) {
-    return res
-      .status(400)
-      .json({ message: "Username and password are required" });
-  }
+  const genericError = "Invalid username or password";
 
   db.get(
-    "SELECT * FROM users WHERE username = ? AND password = ?",
-    [username, password],
-    (err, row) => {
-      if (err) {
-        return res
-          .status(500)
-          .json({ message: err.message || "Internal server error" });
+    "SELECT * FROM users WHERE username = ?",
+    [username],
+    async (err, user) => {
+      if (err) return res.status(500).json({ message: "Server error" });
+
+      if (!user) {
+        // Use a valid dummy hash to prevent timing attacks
+        await bcrypt.compare(
+          "dummy_password",
+          "$2b$10$C6UzMDM.H6dfI/f/IKcEeOaZq0qBz4nMZgWQ8k1b1yqFq0IxDqB36",
+        );
+        return res.status(401).json({ message: genericError });
       }
-      if (!row) {
-        return res.status(401).json({ message: "Invalid credentials" });
-      }
-      // Generate JWT or set session here
-      res.json({
-        message: "Login successful",
-        user: { id: row.id, username: row.username },
+
+      const isMatch = await bcrypt.compare(password, user.password);
+      if (!isMatch) return res.status(401).json({ message: genericError });
+
+      const token = jwt.sign({ userId: user.id, role: user.role }, SECRET_KEY, {
+        expiresIn: "1h",
+        algorithm: "HS256",
       });
+
+      res.json({ message: "Login successful", token, role: user.role });
     },
   );
 };
