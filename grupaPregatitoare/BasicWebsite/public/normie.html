@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BIGCHONGUS | CITIZEN_PORTAL</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <canvas id="matrix"></canvas>
+    <div class="scanlines"></div>
+
+    <div class="theme-switcher">
+        <button type="button" onclick="logout()">LOGOUT</button>
+    </div>
+
+    <div class="form-container" style="text-align: center;">
+        <h2 id="normie-header"></h2> 
+        <div style="border-top: 1px solid var(--primary-color); padding-top: 20px; margin-top: 20px;">
+            <p>> WELCOME, CITIZEN.</p>
+            <p>> ACCESS: RESTRICTED</p>
+            <p>> STATUS: UNDER_SURVEILLANCE</p>
+            <br>
+            <p style="font-size: 0.7rem; color: #555;">Unauthorized attempts to access MASTERMIND_OVERRIDE will result in immediate termination of account.</p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        // GATEKEEPER: Simply ensure they are logged in
+        (function verifyAccess() {
+            if (!localStorage.getItem("token")) {
+                window.location.href = "index.html"; 
+            }
+        })();
+
+        window.onload = () => {
+            if (typeof typeWriter === "function") {
+                typeWriter("normie-header", "[CITIZEN_SESSION_ACTIVE]", 100);
+            }
+        };
+
+        function logout() {
+            localStorage.clear();
+            window.location.href = "index.html";
+        }
+    </script>
+</body>
+</html>

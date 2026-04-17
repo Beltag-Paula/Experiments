@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title> BIGCHONGUS </title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <canvas id="matrix"></canvas>
+  <div class="scanlines"></div>
+
+  <div class="theme-switcher">
+    <button id="themeToggle" type="button">OVERRIDE COLOR</button>
+  </div>
+
+  <form id="loginForm" class="form-container">
+    <h2 id="login-header"></h2> 
+    <div class="input-group">
+      <label for="login-username">IDENT_ID</label>
+      <input type="text" id="login-username" placeholder="Enter ID..." autocomplete="off">
+    </div>
+    <div class="input-group">
+      <label for="login-psw">ACCESS_CODE</label>
+      <input type="password" id="login-psw" placeholder="********">
+    </div>
+    <div class="form-actions">
+      <button type="button" class="primary-btn" onclick="handleLogin()">EXECUTE</button>
+      <button type="button" class="signup-toggle" onclick="toggleForms()">NEW_USER</button>
+    </div>
+    <div id="login-error" class="error-text">ACCESS DENIED: INVALID CODES</div>
+  </form>
+
+  <form id="signupForm" class="form-container hidden">
+    <h2>[NEW_IDENTITY]</h2>
+    <label>SET_IDENT</label>
+    <input type="text" id="signup-username" placeholder="Username...">
+    <label>SET_CODE</label>
+    <input type="password" id="signup-psw" placeholder="Password...">
+    <div class="form-actions">
+      <button type="button" class="primary-btn" onclick="handleSignUp()">CREATE</button>
+      <button type="button" class="cancelbtn" onclick="toggleForms()">ABORT</button>
+    </div>
+    <div id="signup-error" class="error-text">ERROR: FIELDS CANNOT BE EMPTY</div>
+  </form>
+
+
+
+  
+  <script src="script.js"></script>
+</body>
+</html>

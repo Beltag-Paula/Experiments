@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+
+    <title>Sample Page</title>
+  </head>
+  <body>
+    <p>Hello, world!</p>
+
+    <!--This is the login form-->
+    <form id="myLoginForm">
+      <div class="container">
+        <label for="username">Username</label>
+        <input
+          type="text"
+          placeholder="Enter username"
+          name="username"
+          required
+        />
+
+        <label for="password">Password</label>
+        <input
+          type="password"
+          placeholder="Enter password"
+          name="password"
+          required
+        />
+
+        <button type="submit">Login</button>
+      </div>
+    </form>
+
+    <!--This is the sign up form-->
+    <form id="mySignupForm">
+      <div class="container">
+        <label for="username">Username</label>
+        <input
+          type="text"
+          placeholder="Enter username"
+          name="username"
+          required
+        />
+
+        <label for="password">Password</label>
+        <input
+          type="password"
+          placeholder="Enter password"
+          name="password"
+          required
+        />
+
+        <label for="password-repeat">Repeat Password</label>
+        <input
+          type="password"
+          placeholder="Enter password"
+          name="password-repeat"
+          required
+        />
+
+        <button type="submit">Submit</button>
+      </div>
+    </form>
+    <script>
+      document.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        const form = event.target;
+        const formData = new FormData(form);
+
+        // 1. Convert FormData to a plain JavaScript Object
+        const data = Object.fromEntries(formData.entries());
+
+        let endpoint = "";
+        if (form.id === "myLoginForm") endpoint = "/api/v1/login";
+
+        if (form.id === "mySignupForm") {
+          if (data.password !== data["password-repeat"]) {
+            alert("Passwords do not match!");
+            return;
+          }
+          endpoint = "/api/v1/signup";
+        }
+
+        try {
+          const response = await fetch(endpoint, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          
+            body: JSON.stringify(data),
+          });
+
+          if (response.ok) {
+            const result = await response.json();
+            alert("Success!");
+            console.log(result);
+          } else {
+            const errorText = await response.text();
+            console.error("Server Error:", errorText);
+          }
+        } catch (error) {
+          console.error("Network error:", error);
+        }
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,150 @@
+:root {
+    --primary-color: #00ff41;
+    --cancel-color: #ff3e3e;
+    --bg-black: #000;
+}
+
+body.blue-theme {
+    --primary-color: #00ccff;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--bg-black);
+    font-family: 'Courier New', Courier, monospace;
+    overflow: hidden;
+    color: var(--primary-color);
+}
+
+canvas#matrix {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1;
+}
+
+.scanlines {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%);
+    background-size: 100% 4px;
+    z-index: 2;
+    pointer-events: none;
+}
+
+.form-container {
+    position: relative;
+    z-index: 10;
+    background: rgba(0, 0, 0, 0.9);
+    border: 1px solid var(--primary-color);
+    width: 350px;
+    padding: 30px;
+    margin: 15vh auto;
+    box-shadow: 0 0 20px rgba(0, 255, 65, 0.2);
+}
+
+h2 {
+    text-align: center;
+    text-shadow: 0 0 5px var(--primary-color);
+    min-height: 1.2em;
+}
+
+label {
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+}
+
+input {
+    width: 100%;
+    background: transparent;
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
+    padding: 12px;
+    margin: 8px 0 20px 0;
+    box-sizing: border-box;
+    outline: none;
+}
+
+button {
+    background: var(--primary-color);
+    color: #000;
+    border: none;
+    padding: 12px;
+    cursor: pointer;
+    font-weight: bold;
+    font-family: 'Courier New', monospace;
+    transition: 0.2s;
+}
+
+button:hover {
+    background: #000;
+    color: var(--primary-color);
+    box-shadow: 0 0 15px var(--primary-color);
+}
+
+.cancelbtn {
+    border: 1px solid var(--cancel-color);
+    background: transparent;
+    color: var(--cancel-color);
+}
+
+.error-text {
+    color: var(--cancel-color);
+    font-size: 0.7rem;
+    text-align: center;
+    margin-top: 15px;
+    display: none;
+    text-transform: uppercase;
+}
+
+.shake {
+    animation: shake-anim 0.4s cubic-bezier(.36, .07, .19, .97) both;
+    border-color: var(--cancel-color) !important;
+}
+
+@keyframes shake-anim {
+
+    10%,
+    90% {
+        transform: translate3d(-1px, 0, 0);
+    }
+20%,
+80% {
+    transform: translate3d(2px, 0,0);
+    }
+
+    30%,
+    50%,
+    70% {
+        transform: translate3d(-4px, 0, 0);
+    }
+
+    40%,
+    60% {
+        transform: translate3d(4px, 0, 0);
+    }
+}
+
+.hidden {
+    display: none;
+}
+
+.form-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.theme-switcher {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    z-index: 100;
+}
